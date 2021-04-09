@@ -45,7 +45,7 @@ func (server *Server) handleConnection(rawConn net.Conn) {
   if conn == nil && initDat[0] == '{' {
      ...
      teaseConn.Pipe()  // Connect the teaser to the input
-     conn = teaseConn // Go ahead with the wrapper
+     conn = teaseConn // Go ahead without a wrapper
   }
 
   // When none of the tests passed
