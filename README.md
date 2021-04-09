@@ -54,7 +54,7 @@ func (server *Server) handleConnection(rawConn net.Conn) {
   }
   ...
 
-  // Work with the `conn` handle for furhter reads and writes
+  // Work with the `conn` handle for further reads and writes
 
 }
 ```
