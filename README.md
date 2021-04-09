@@ -1,4 +1,4 @@
-GoLang Tease - The package for protocol detection and testing.
+# GoLang Tease - The package for protocol detection and testing.
 
 When detecting the protocol, a special tool need to be able to test incoming
 packets against a variety of decoders is needed.  The teaser is the answer.  It
@@ -11,7 +11,7 @@ the protocol reader is unsuccessful, the programmer can call Replay(), which
 resets the reads to the beginning of the input stream and allows a different
 protocol tester to be applied.
 
-Example Server usage:
+# Example Server usage
 ```
 func (server *Server) handleConnection(rawConn net.Conn) {
 	// Load up a new teaser
