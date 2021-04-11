@@ -195,7 +195,11 @@ func (c *Server) Read(b []byte) (n int, err error) {
 		n, err = c.conn.Read(b)
 		return
 	}
+	n, err = c.read(b)
+	return
+}
 
+func (c *Server) read(b []byte) (n int, err error) {
 	// If we are in an error state, give up
 	if err != nil {
 		return 0, err
@@ -270,7 +274,11 @@ func (c *Client) Write(b []byte) (n int, err error) {
 		n, err = c.conn.Write(b)
 		return
 	}
+	n, err = c.write(b)
+	return
+}
 
+func (c *Client) write(b []byte) (n int, err error) {
 	// If we are in an error state, give up
 	if err != nil {
 		return 0, err
@@ -304,7 +312,11 @@ func (c *Server) Write(b []byte) (n int, err error) {
 		n, err = c.conn.Write(b)
 		return
 	}
+	n, err = c.write(b)
+	return
+}
 
+func (c *Server) write(b []byte) (n int, err error) {
 	// If we are in an error state, give up
 	if err != nil {
 		return 0, err
