@@ -1,17 +1,22 @@
-GoLang Tease - The package for protocol detection and testing.
+# GoLang Tease - The package for protocol detection and testing.
 
-When detecting the protocol, a special tool need to be able to test incoming
-packets against a variety of decoders is needed.  The teaser is the answer.  It
-mimics an either a server or client connection, while offering net.Conn like
+
+A Go library for protocol testing / analyzing.  This way incoming/outgoing stream connections can be tested against a variety of decoders before the connection is fully engaged (buffered and replay capabilities)
+
+With this tool a developer is able to test incoming
+packets against a variety of decoders as needed.  It
+mimics an either a server or client connection, while offering a net.Conn type
 interface.  This way one can do a read off a connection stream, and the teaser
-will prevent the reader from closing or sending on this connection.  If the
+will prevent the reader from closing or sending replies on this connection.  
+
+When a
 protocol reader is successful, the programmer can call the Pipe() function to
-flatten out the connection teaser into a simple input/output passthrough.  If
+flatten out the connection, reducing teaser into a simple input/output passthrough.  If
 the protocol reader is unsuccessful, the programmer can call Replay(), which
 resets the reads to the beginning of the input stream and allows a different
 protocol tester to be applied.
 
-Example Server usage:
+# Example Server usage
 ```
 func (server *Server) handleConnection(rawConn net.Conn) {
 	// Load up a new teaser
@@ -40,7 +45,7 @@ func (server *Server) handleConnection(rawConn net.Conn) {
   if conn == nil && initDat[0] == '{' {
      ...
      teaseConn.Pipe()  // Connect the teaser to the input
-     conn = tls.Server(teaseConn, server.TLSConfig)  // Go ahead with the wrapper
+     conn = teaseConn // Go ahead without a wrapper
   }
 
   // When none of the tests passed
@@ -49,7 +54,7 @@ func (server *Server) handleConnection(rawConn net.Conn) {
   }
   ...
 
-  // Work with the `conn` handle for furhter reads and writes
+  // Work with the `conn` handle for further reads and writes
 
 }
 ```
