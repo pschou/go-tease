@@ -27,6 +27,16 @@ func NewReader(r io.Reader) *Reader {
 	}
 }
 
+func (c *Reader) Close() {
+	if c.buf != nil {
+		c.buf.Reset()
+	}
+	c.pos = 0
+	c.r = nil
+	c.r_tee = nil
+	c.r_mr = nil
+}
+
 //func (c *Reader) ResetFunc(f func() error) {
 //	c.reset = &f
 //}
@@ -74,10 +84,10 @@ func (c *Reader) seek(offset int64, whence int) (n int64, err error) {
 		return 0, errors.New("Reader.Seek: negative position")
 	}
 
-	if abs >= int64(c.buf.Len()) {
-		n, err = c.r_tee.Seek(abs, whence)
+	if abs > int64(c.buf.Len()) {
+		n, err = c.r_tee.Seek(abs, io.SeekStart)
 		c.pos = n
-		return
+		return c.pos, err
 	}
 	c.pos = abs
 	return c.pos, err
