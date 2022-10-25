@@ -103,6 +103,11 @@ func (c *Reader) Read(b []byte) (n int, err error) {
 	//}
 	return
 }
+func (c *Reader) ReadByte() (byte, error) {
+	oneByte := []byte{0}
+	_, err := c.Read(oneByte)
+	return oneByte[0], err
+}
 
 func (c *Reader) ReadAt(p []byte, off int64) (int, error) {
 	//fmt.Println("readat called", len(p), "off", off, "pos", c.pos)
