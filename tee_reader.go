@@ -12,16 +12,14 @@ import (
 // Any error encountered while writing is reported as a read error.
 func TeeReadSeeker(r io.Reader, w io.Writer) *teeReadSeeker {
 	return &teeReadSeeker{
-		r:   r,
-		w:   w,
-		buf: make([]byte, 2048),
+		r: r,
+		w: w,
 	}
 }
 
 type teeReadSeeker struct {
 	r   io.Reader
 	w   io.Writer
-	buf []byte
 	pos int64
 }
 
@@ -54,19 +52,8 @@ func (mr *teeReadSeeker) Seek(offset int64, whence int) (int64, error) {
 		return 0, errors.New("TeeReadSeeker.Seek: cannot go backwards!")
 	}
 
-	bl := int64(len(mr.buf))
-	var np int
-	var err error
-	for tr := abs - mr.pos; tr > 0; tr -= bl {
-		if tr < bl {
-			bl = tr
-		}
-		np, err = mr.Read(mr.buf[:bl])
-		mr.pos += int64(np)
-		if err != nil || int64(np) != bl {
-			break
-		}
-	}
+	np, err := io.CopyN(io.Discard, mr, abs-mr.pos)
+	mr.pos += int64(np)
 
 	return mr.pos, err
 }
